@@ -1,0 +1,32 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+k = 8.99e9  
+Q = 100e-6  
+q = 1e-15  
+d = 1      
+m = 1e-6    
+
+#frecuencia angular
+omega = np.sqrt((2 * k * Q * q) / (m * (d/2)**3))
+
+t = np.linspace(0, 10, 50)
+
+A = 0.01  
+x = A * np.cos(omega * t)
+v = -A * omega * np.sin(omega * t)
+
+print("t\t x\t\t v")
+for i in range(len(t)):
+    print(f"{t[i]:.2f}\t{x[i]:.5e}\t{v[i]:.5e}")
+
+plt.figure()
+plt.plot(t, x, label="Posición (x)")
+plt.plot(t, v, label="Velocidad (v)")
+plt.xlabel("Tiempo (s)")
+plt.ylabel("Magnitud")
+plt.title("Movimiento armónico de la carga q")
+plt.legend()
+plt.grid()
+
+plt.show()
