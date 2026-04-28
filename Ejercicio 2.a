@@ -1,0 +1,66 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+epsilon0 = 8.854e-12
+k = 1 / (4 * np.pi * epsilon0)
+
+cargas = [
+    (2e-6, 0, 0),
+    (-3e-6, 1, 0),
+    (1e-6, 0, 1)
+]
+
+x = 0.5
+y = 0.5
+
+Ex = 0
+Ey = 0
+
+for qi, xi, yi in cargas:
+    dx = x - xi
+    dy = y - yi
+    r = np.sqrt(dx**2 + dy**2)
+   
+    if r == 0:
+        continue
+   
+    Ex += k * qi * dx / r**3
+    Ey += k * qi * dy / r**3
+
+E = np.sqrt(Ex**2 + Ey**2)
+theta = np.degrees(np.arctan2(Ey, Ex))
+
+plt.figure(figsize=(6,6))
+
+for qi, xi, yi in cargas:
+    if qi > 0:
+        plt.scatter(xi, yi, s=100, marker='o')
+        plt.text(xi, yi, f"+{qi:.1e}", fontsize=8)
+    else:
+        plt.scatter(xi, yi, s=100, marker='x')
+        plt.text(xi, yi, f"{qi:.1e}", fontsize=8)
+
+plt.scatter(x, y, s=80, marker='s')
+
+escala = 1e-5
+plt.quiver(x, y, Ex*escala, Ey*escala, angles='xy', scale_units='xy', scale=1)
+
+texto = (
+    f"Punto: ({x:.2f}, {y:.2f})\n"
+    f"|E| = {E:.2e} N/C\n"
+    f"Ángulo = {theta:.2f}°"
+)
+
+plt.text(0.02, 0.95, texto, transform=plt.gca().transAxes,
+         fontsize=9, verticalalignment='top',
+         bbox=dict(boxstyle="round", facecolor="white"))
+
+plt.axhline(0)
+plt.axvline(0)
+plt.grid()
+plt.xlabel("x (m)")
+plt.ylabel("y (m)")
+plt.title("Campo eléctrico")
+
+plt.axis('equal')
+plt.show()
