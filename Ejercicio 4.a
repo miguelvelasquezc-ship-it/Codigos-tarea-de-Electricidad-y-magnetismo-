@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+k = 8.99e9
+e = 1.602e-19  
+
+q = 100 * e    
+Q = -e          
+m = 9.11e-31    
+d = 1e-10      
+
+dt = 1e-18
+t_total = 5e-15
+t = np.arange(0, t_total, dt)
+
+x = np.zeros(len(t))
+v = np.zeros(len(t))
+
+x[0] = 1e-11
+v[0] = 0
+
+def fuerza(x):
+    r = np.sqrt(x**2 + (d/2)**2)
+    F = 2 * k * q * Q * x / (r**3)
+    return F
+
+for i in range(len(t)-1):
+    a = fuerza(x[i]) / m
+    v[i+1] = v[i] + a * dt
+    x[i+1] = x[i] + v[i] * dt
+
+print("t\t x\t\t v")
+for i in range(0, len(t), len(t)//30):
+    print(f"{t[i]:.2e}\t{x[i]:.2e}\t{v[i]:.2e}")
+
+plt.figure()
+plt.plot(t, x, label="Posicion")
+plt.plot(t, v, label="Velocidad")
+plt.xlabel("Tiempo (s)")
+plt.legend()
+plt.grid()
+plt.title("Movimiento del electron")
+
+plt.show()
