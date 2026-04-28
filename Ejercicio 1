@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+q = -1.602e-19
+m = 9.11e-31
+E = 400
+vx = 3e6
+
+a = (q * E) / m
+
+t_ns = np.arange(0, 3001, 100)
+t = t_ns * 1e-9
+
+x = vx * t
+y = 0.5 * a * t**2
+
+data = [[t_ns[i], f"{x[i]:.3e}", f"{y[i]:.3e}"] for i in range(len(t))]
+
+n_filas = len(data)
+alto_por_fila = 0.3  
+alto_figura = max(4, n_filas * alto_por_fila)
+
+fig, ax = plt.subplots(figsize=(8, alto_figura))
+ax.axis('off')
+
+tabla = ax.table(
+    cellText=data,
+    colLabels=["t (ns)", "x (m)", "y (m)"],
+    loc='center'
+)
+
+tabla.auto_set_font_size(False)
+tabla.set_fontsize(8)
+tabla.scale(1, 1.2)
+
+plt.show()
