@@ -1,0 +1,31 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+q = -1.602e-19  # C
+m = 9.11e-31    # kg
+E = 400         # N/C
+vx = 3e6        # m/s
+
+a = (q * E) / m
+
+t_ns = np.arange(0, 3001, 100)
+t = t_ns * 1e-9
+
+x = vx * t
+y = 0.5 * a * t**2
+
+plt.figure(figsize=(8,5))
+
+plt.plot(x, y, linestyle='--')
+
+plt.scatter(x, y)
+
+for i in range(len(t)):
+    plt.text(x[i], y[i], f"{t_ns[i]} ns", fontsize=7)
+
+plt.xlabel("Posicion en x (m)")
+plt.ylabel("Posicion en y (m)")
+plt.title("Movimiento del electron")
+plt.grid()
+
+plt.show()
