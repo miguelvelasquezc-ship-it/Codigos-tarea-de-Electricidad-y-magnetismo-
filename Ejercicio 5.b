@@ -28,7 +28,7 @@ linea, = ax.plot([], [], 'b--', alpha=0.5)
 
 particle, = ax.plot([], [], 'bo', markersize=10, label="+q")
 
-ax.set_title("Movimiento armónico (visual mejorado)")
+ax.set_title("Movimiento armónico")
 ax.set_xlabel("Posición x")
 ax.get_yaxis().set_visible(False)
 ax.legend()
