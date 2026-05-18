@@ -1,66 +1,76 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Constantes
 epsilon0 = 8.854e-12
-k = 1 / (4 * np.pi * epsilon0)
+k = 1 / (4 * np.pi * epsilon0)  #Constante electrica
 
+#Definicion de las cargas
 cargas = [
     (2e-6, 0, 0),
     (-3e-6, 1, 0),
     (1e-6, 0, 1)
 ]
-
+#Coordenadas donde se calculara el campo
 x = 0.5
 y = 0.5
-
+#Componentes del campo electrico
 Ex = 0
 Ey = 0
 
+#Calculo del campo electrico
 for qi, xi, yi in cargas:
-    dx = x - xi
-    dy = y - yi
-    r = np.sqrt(dx**2 + dy**2)
-   
+    dx = x - xi      #distancia horizontal entre carga y punto
+    dy = y - yi      #distancia vertical entre carga y punto
+    r = np.sqrt(dx**2 + dy**2)    #distancia total entre carga y punto
+#para evitar division entre 0
     if r == 0:
         continue
-   
-    Ex += k * qi * dx / r**3
-    Ey += k * qi * dy / r**3
 
-E = np.sqrt(Ex**2 + Ey**2)
-theta = np.degrees(np.arctan2(Ey, Ex))
+    Ex += k * qi * dx / r**3    #componente x del campo electrico
+    Ey += k * qi * dy / r**3    #componente y del campo electrico
 
+E = np.sqrt(Ex**2 + Ey**2)     #Magnitud total del campo electrico
+theta = np.degrees(np.arctan2(Ey, Ex))   #angulo con respecto al eje x
+
+#crear ventana para grafica
 plt.figure(figsize=(6,6))
-
+#recorrer las cargas
 for qi, xi, yi in cargas:
     if qi > 0:
-        plt.scatter(xi, yi, s=100, marker='o')
+        plt.scatter(xi, yi, s=100, marker='o')   #poner circulo para carga positiva
         plt.text(xi, yi, f"+{qi:.1e}", fontsize=8)
     else:
-        plt.scatter(xi, yi, s=100, marker='x')
+        plt.scatter(xi, yi, s=100, marker='x')   #poner cruz para carga negativa
         plt.text(xi, yi, f"{qi:.1e}", fontsize=8)
 
+#dibujar punto donde se calcula el campo
 plt.scatter(x, y, s=80, marker='s')
 
+#reducir tamaño visual del vector
 escala = 1e-5
+#dibujar flecha del campo electrico
 plt.quiver(x, y, Ex*escala, Ey*escala, angles='xy', scale_units='xy', scale=1)
 
+#texto para coordenadas, magnitud y angulo
 texto = (
     f"Punto: ({x:.2f}, {y:.2f})\n"
     f"|E| = {E:.2e} N/C\n"
     f"Ángulo = {theta:.2f}°"
 )
 
+#mostrar texto en la grafica
 plt.text(0.02, 0.95, texto, transform=plt.gca().transAxes,
          fontsize=9, verticalalignment='top',
          bbox=dict(boxstyle="round", facecolor="white"))
 
-plt.axhline(0)
-plt.axvline(0)
-plt.grid()
+#configuracion de la grafica
+plt.axhline(0)   #eje horizontal
+plt.axvline(0)   #eje vertical
+plt.grid()       #mostrar cuadricula
 plt.xlabel("x (m)")
 plt.ylabel("y (m)")
 plt.title("Campo eléctrico")
 
-plt.axis('equal')
-plt.show()
+plt.axis('equal') #ambos ejes con misma escala
+plt.show() #mostrar
