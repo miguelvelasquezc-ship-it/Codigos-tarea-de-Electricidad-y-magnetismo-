@@ -42,7 +42,7 @@ def update(frame):
     return punto, texto      #retornar objetos
 
 #Ejecuta la funcion update para crear la animacion
-ani = FuncAnimation(fig, update, frames=len(t), interval=200, repeat=False)
+ani = FuncAnimation(fig, update, frames=len(t), interval=200, repeat=True)
 
 #mostrar
 plt.show()
