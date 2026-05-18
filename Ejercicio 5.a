@@ -1,32 +1,78 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-k = 8.99e9  
-Q = 100e-6  
-q = 1e-15  
-d = 1      
-m = 1e-6    
+#constante de coulomb
+k = 8.99e9
+#carga fija
+Q = 100e-6
+#carga oscilante
+q = 1e-15
+#masa de la particula
+m = 1e-6
+#distancia caracteristica del sistema
+d = 1
+#amplitud de oscilacion
+A = 0.1
 
-#frecuencia angular
-omega = np.sqrt((2 * k * Q * q) / (m * (d/2)**3))
+#calcular frecuencia angular del movimiento armonico simple
+omega = np.sqrt((16 * k * Q * q) / (m * d**3))
 
-t = np.linspace(0, 10, 50)
+#calcular periodo de oscilacion
+T = 2 * np.pi / omega
 
-A = 0.01  
+#mostrar resultados principales
+print("Frecuencia angular =", omega)
+print("Periodo =", T)
+
+#generar tiempos desde 0 hasta 2 periodos
+#usando 30 puntos
+t = np.linspace(0, 2*T, 30)
+
+#ecuacion de posicion:
+#x(t) = A cos(wt)
 x = A * np.cos(omega * t)
+
+#ecuacion de velocidad:
+#v(t) = -Aw sen(wt)
 v = -A * omega * np.sin(omega * t)
 
-print("t\t x\t\t v")
+
+#imprimir encabezado de tabla
+print("\n t\t\t x(t)\t\t v(t)")
+print("-"*45)
+
+#recorrer todos los valores calculados
 for i in range(len(t)):
-    print(f"{t[i]:.2f}\t{x[i]:.5e}\t{v[i]:.5e}")
 
-plt.figure()
-plt.plot(t, x, label="Posición (x)")
-plt.plot(t, v, label="Velocidad (v)")
-plt.xlabel("Tiempo (s)")
-plt.ylabel("Magnitud")
-plt.title("Movimiento armónico de la carga q")
+    #imprimir tiempo, posicion y velocidad
+    print(f"{t[i]:.5f}\t {x[i]:.5f}\t {v[i]:.5f}")
+
+#crear figura para la grafica
+plt.figure(figsize=(10,5))
+
+#graficar posicion en funcion del tiempo
+plt.plot(
+    t,
+    x,
+    'o-',
+    label='Posición x(t)'
+)
+
+#graficar velocidad en funcion del tiempo
+plt.plot(
+    t,
+    v,
+    's-',
+    label='Velocidad v(t)'
+)
+
+#etiqueta del eje x
+plt.xlabel('Tiempo')
+#etiqueta del eje y
+plt.ylabel('Magnitud')
+#titulo de la grafica
+plt.title('Movimiento Armónico Simple de la carga q')
+
+plt.grid(True)
 plt.legend()
-plt.grid()
-
 plt.show()
