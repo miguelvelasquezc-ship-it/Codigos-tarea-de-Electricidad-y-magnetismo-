@@ -1,31 +1,41 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-q = -1.602e-19  # C
-m = 9.11e-31    # kg
-E = 400         # N/C
-vx = 3e6        # m/s
+#Datos del problema
+q = -1.602e-19  #C
+m = 9.11e-31    #kg
+E = 400         #N/C
+vx = 3e6        #m/s
 
+#Calculo de la aceleracion
 a = (q * E) / m
 
+#Vector de tiempo en nanosegundos de 0 a 3000, en intervalos de 100
 t_ns = np.arange(0, 3001, 100)
 t = t_ns * 1e-9
 
+#Calculo de las posiciones
 x = vx * t
 y = 0.5 * a * t**2
 
+#Creacion de la figura
+#ventana de grafica y tamaño
 plt.figure(figsize=(8,5))
-
+#grafica de la trayectoria
 plt.plot(x, y, linestyle='--')
-
+#para graficar los puntos
 plt.scatter(x, y)
 
+#Se agrega etiquetas de tiempo para cada punto
 for i in range(len(t)):
     plt.text(x[i], y[i], f"{t_ns[i]} ns", fontsize=7)
 
+#Etiquetas y titulo
 plt.xlabel("Posicion en x (m)")
 plt.ylabel("Posicion en y (m)")
 plt.title("Movimiento del electron")
+#mostrar la cuadricula
 plt.grid()
 
+#Mostrar
 plt.show()
