@@ -1,36 +1,46 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-q = -1.602e-19
-m = 9.11e-31
-E = 400
-vx = 3e6
+#Datos del problema
+q = -1.602e-19 #C
+m = 9.11e-31   #kg
+E = 400        #N/C
+vx = 3e6       #m/s
 
+#Calculo de la aceleracion
 a = (q * E) / m
 
+#Vector de tiempo en nanosegundos de 0 a 3000, en intervalos de 100
 t_ns = np.arange(0, 3001, 100)
 t = t_ns * 1e-9
 
+#Calculo de las posiciones
 x = vx * t
 y = 0.5 * a * t**2
 
+#Se crea una lista de tiempo, posicion x, posicion y
 data = [[t_ns[i], f"{x[i]:.3e}", f"{y[i]:.3e}"] for i in range(len(t))]
 
+#ajuste del tamaño de la figura
 n_filas = len(data)
-alto_por_fila = 0.3  
+alto_por_fila = 0.3
 alto_figura = max(4, n_filas * alto_por_fila)
 
+#Creacion de la figura y sus ejes
 fig, ax = plt.subplots(figsize=(8, alto_figura))
 ax.axis('off')
 
+#Formacion de la tabla
 tabla = ax.table(
     cellText=data,
     colLabels=["t (ns)", "x (m)", "y (m)"],
     loc='center'
 )
 
+#Ajustes de la tabla
 tabla.auto_set_font_size(False)
 tabla.set_fontsize(8)
 tabla.scale(1, 1.2)
 
+#Mostrar
 plt.show()
