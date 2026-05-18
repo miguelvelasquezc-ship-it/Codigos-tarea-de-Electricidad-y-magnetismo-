@@ -1,44 +1,80 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-k = 8.99e9
-e = 1.602e-19  
+#constantes
+k = 8.99e9                  #Constante de Coulomb
+e = 1.602e-19               #Carga del electrón/protón
+mp = 1.67e-27               #Masa del protón
+me = 9.11e-31               #Masa del electrón
 
-q = 100 * e    
-Q = -e          
-m = 9.11e-31    
-d = 1e-10      
+#datos
+q = 100 * e                 #Carga positiva (+q)
+Q = e                       #Magnitud de la carga del electrón (-Q)
+d = 1e-10                   #Distancia entre protones (1 Å)
 
-dt = 1e-18
-t_total = 5e-15
-t = np.arange(0, t_total, dt)
 
-x = np.zeros(len(t))
-v = np.zeros(len(t))
+x0 = 5e-11                  #Posición inicial del electrón
+v0 = 0                      #Parte desde reposo
 
-x[0] = 1e-11
-v[0] = 0
 
-def fuerza(x):
-    r = np.sqrt(x**2 + (d/2)**2)
-    F = 2 * k * q * Q * x / (r**3)
-    return F
+dt = 1e-18                  #Paso temporal
+N = 30                      #Número de posiciones solicitadas
 
-for i in range(len(t)-1):
-    a = fuerza(x[i]) / m
-    v[i+1] = v[i] + a * dt
-    x[i+1] = x[i] + v[i] * dt
 
-print("t\t x\t\t v")
-for i in range(0, len(t), len(t)//30):
-    print(f"{t[i]:.2e}\t{x[i]:.2e}\t{v[i]:.2e}")
+x = [x0]
+v = [v0]
+t = [0]
 
-plt.figure()
-plt.plot(t, x, label="Posicion")
-plt.plot(t, v, label="Velocidad")
+
+for i in range(N - 1):
+
+    #Campo eléctrico total sobre el eje x
+    #Distancia a cada carga positiva
+    r = np.sqrt(x[i]**2 + (d/2)**2)
+
+    #Fuerza eléctrica neta sobre el electrón
+    #El signo negativo aparece porque el electrón es negativo
+    Fx = -2 * k * q * Q * x[i] / (r**3)
+
+    #Aceleración
+    ax = Fx / me
+
+    #Actualización
+    vn = v[i] + ax * dt
+    xn = x[i] + vn * dt
+
+    #Guardar datos
+    v.append(vn)
+    x.append(xn)
+    t.append(t[i] + dt)
+
+#Conversion de unidades
+x_angstrom = np.array(x) * 1e10   # m -> Å
+v_km = np.array(v) / 1000         # m/s -> km/s
+
+print(" n        x (Å)           v (km/s)")
+print("-" * 40)
+
+for i in range(N):
+    print(f"{i:2d}   {x_angstrom[i]:12.6f}   {v_km[i]:12.6f}")
+
+plt.figure(figsize=(12,5))
+
+#Posicion
+plt.subplot(1,2,1)
+plt.plot(t, x_angstrom, 'bo-')
 plt.xlabel("Tiempo (s)")
-plt.legend()
-plt.grid()
-plt.title("Movimiento del electron")
+plt.ylabel("Posición x (Å)")
+plt.title("Posición del electrón")
+plt.grid(True)
 
+#Velocidad
+plt.subplot(1,2,2)
+plt.plot(t, v_km, 'ro-')
+plt.xlabel("Tiempo (s)")
+plt.ylabel("Velocidad (km/s)")
+plt.title("Velocidad del electrón")
+plt.grid(True)
+
+plt.tight_layout()
 plt.show()
